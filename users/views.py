@@ -16,14 +16,13 @@ from .models import UserProfile
 
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
-    permission_classes = [permissions.AllowAny]  # No authentication needed for registration
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
-        # Create user profile
         UserProfile.objects.create(user=user)
 
         refresh = RefreshToken.for_user(user)
@@ -36,7 +35,7 @@ class RegisterView(generics.CreateAPIView):
 
 class LoginView(generics.GenericAPIView):
     serializer_class = LoginSerializer
-    permission_classes = [permissions.AllowAny]  # No authentication needed for login
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -60,7 +59,7 @@ class LoginView(generics.GenericAPIView):
 
 class RefreshTokenView(generics.GenericAPIView):
     serializer_class = RefreshTokenSerializer
-    permission_classes = [permissions.AllowAny]  # No authentication needed to refresh token
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -76,12 +75,12 @@ class RefreshTokenView(generics.GenericAPIView):
 
 class VerifyTokenView(TokenVerifyView):
     serializer_class = VerifyTokenSerializer
-    permission_classes = [permissions.AllowAny]  # No authentication needed for token verification
+    permission_classes = [permissions.AllowAny]
 
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can access their profile
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
         return self.request.user

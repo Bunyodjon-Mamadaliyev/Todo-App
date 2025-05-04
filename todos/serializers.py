@@ -37,8 +37,6 @@ class TodoListSerializer(serializers.ModelSerializer):
         return value
 
 
-
-
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag

@@ -2,12 +2,10 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from tags.models import Tag
 from .models import TodoList, TodoItem
-import uuid
 
 class TodoListModelTest(TestCase):
 
     def setUp(self):
-        # Test uchun User va Tag yaratish
         self.user = User.objects.create_user(username='testuser', password='password123')
         self.tag = Tag.objects.create(name="Urgent", color="#FF0000")
         self.todo_list = TodoList.objects.create(
@@ -17,14 +15,12 @@ class TodoListModelTest(TestCase):
         )
 
     def test_todo_list_creation(self):
-        # TodoList to'g'ri yaratildi yoki yo'qligini tekshirish
         todo_list = self.todo_list
         self.assertEqual(todo_list.title, "My Todo List")
         self.assertEqual(todo_list.owner, self.user)
         self.assertTrue(todo_list.is_public)
 
     def test_todo_list_str_method(self):
-        # __str__ metodini test qilish
         todo_list = self.todo_list
         self.assertEqual(str(todo_list), "My Todo List")
 
@@ -32,7 +28,6 @@ class TodoListModelTest(TestCase):
 class TodoItemModelTest(TestCase):
 
     def setUp(self):
-        # Test uchun User, Tag va TodoList yaratish
         self.user = User.objects.create_user(username='testuser', password='password123')
         self.tag = Tag.objects.create(name="Urgent", color="#FF0000")
         self.todo_list = TodoList.objects.create(
@@ -48,7 +43,6 @@ class TodoItemModelTest(TestCase):
         )
 
     def test_todo_item_creation(self):
-        # TodoItem to'g'ri yaratildimi yoki yo'qligini tekshirish
         todo_item = self.todo_item
         self.assertEqual(todo_item.title, "First Todo Item")
         self.assertEqual(todo_item.priority, 1)
@@ -56,17 +50,14 @@ class TodoItemModelTest(TestCase):
         self.assertEqual(todo_item.todo_list, self.todo_list)
 
     def test_todo_item_str_method(self):
-        # __str__ metodini test qilish
         todo_item = self.todo_item
         self.assertEqual(str(todo_item), "First Todo Item")
 
     def test_todo_item_tags(self):
-        # Taglar bilan ishlashni tekshirish
         self.todo_item.tags.add(self.tag)
         self.assertIn(self.tag, self.todo_item.tags.all())
 
     def test_priority_choices(self):
-        # Prioritet tanlovlarini tekshirish
         todo_item = TodoItem.objects.create(
             todo_list=self.todo_list,
             title="Second Todo Item",
@@ -76,7 +67,6 @@ class TodoItemModelTest(TestCase):
         self.assertEqual(todo_item.priority, 2)
 
     def test_status_choices(self):
-        # Status tanlovlarini tekshirish
         todo_item = TodoItem.objects.create(
             todo_list=self.todo_list,
             title="Third Todo Item",
